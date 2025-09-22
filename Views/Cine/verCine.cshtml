@@ -1,0 +1,71 @@
+﻿@model Tuple<System.Data.DataTable, System.Data.DataTable, System.Data.DataTable>
+@{
+    ViewBag.Title = "verCine";
+    Layout = "~/Views/Shared/CineStar.cshtml";
+
+    var cine = Model.Item1.Rows[0];
+    var precios = Model.Item2;
+    var funciones = Model.Item3;
+}
+
+<h2>@cine["RazonSocial"]</h2>
+<div class="cine-info">
+    <div class="cine-info datos">
+        <p>@cine["Direccion"]</p>
+        <p>Teléfono: @cine["Telefonos"]</p>
+        <br>
+
+        <div class="tabla">
+            @foreach (System.Data.DataRow precio in precios.Rows)
+            {
+                <div class="fila @(precio["Fila"]?.ToString() == "impar" ? "impar" : "")">
+                    <div class="celda-titulo">@precio["Descripcion"]</div>
+                    <div class="celda">S/. @precio["Precio"]</div>
+                </div>
+            }
+        </div>
+
+        <div class="aviso">
+            <p>
+                A partir del 1ro de julio de 2016, Cinestar Multicines realizará el cobro de la
+                comisión de S/. 1.00 adicional al tarifario vigente, a los usuarios que compren
+                sus entradas por el aplicativo de Cine Papaya para Cine Star Comas, Excelsior,
+                Las Américas, Benavides, Breña, San Juan, UNI, Aviación, Sur, Porteño, Tumbes y Tacna.
+            </p>
+        </div>
+    </div>
+
+    <img src="@Url.Content("~/Content/img/cine/" + cine["id"] + ".2.jpg")" />
+
+    <br><br>
+    <h4>Los horarios de cada función están sujetos a cambios sin previo aviso.</h4><br>
+
+    <div class="cine-info peliculas">
+        <div class="tabla">
+            <div class="fila">
+                <div class="celda-cabecera">Películas</div>
+                <div class="celda-cabecera">Horarios</div>
+            </div>
+
+            @foreach (System.Data.DataRow funcion in funciones.Rows)
+            {
+                <div class="fila @(funcion["Fila"]?.ToString() == "impar" ? "impar" : "")">
+                    <div class="celda-titulo">@funcion["Pelicula"]</div>
+                    <div class="celda">@funcion["Horarios"]</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div>
+    <img style="float: left;" src="@Url.Content("~/Content/img/cine/" + cine["id"] + ".3.jpg")">
+    <span class="tx gris">
+        Precios de los juegos: desde S/1.00 en todos los Cine Star.<br>
+        Horario de atención de juegos es de 12:00 m hasta las 10:30 pm.
+        <br><br>
+        Visítanos y diviértete con nosotros.
+        <br><br>
+        <b>CINESTAR</b>, siempre pensando en ti.
+    </span>
+</div>

@@ -1,0 +1,69 @@
+﻿@model System.Data.DataRow
+@{
+    ViewBag.Title = "verPelicula";
+    Layout = "~/Views/Shared/CineStar.cshtml";
+
+    var titulo = Model.Table.Columns.Contains("Titulo") ? Model["Titulo"].ToString() : "Título no disponible";
+    var sinopsis = Model.Table.Columns.Contains("Sinopsis") ? Model["Sinopsis"].ToString() : "Sinopsis no disponible";
+    var fechaEstreno = Model.Table.Columns.Contains("FechaEstreno") ? Model["FechaEstreno"].ToString() : "-";
+    var genero = Model.Table.Columns.Contains("Geneross") ? Model["Geneross"].ToString() : "-";
+    var director = Model.Table.Columns.Contains("Director") ? Model["Director"].ToString() : "-";
+    var reparto = Model.Table.Columns.Contains("Reparto") ? Model["Reparto"].ToString() : "-";
+    var duracion = Model.Table.Columns.Contains("Duracion") ? Model["Duracion"].ToString() : "-";
+    var idPelicula = Model.Table.Columns.Contains("Id") ? Model["Id"].ToString() : "0";
+    var link = Model.Table.Columns.Contains("Link") && Model["Link"] != DBNull.Value ? Model["Link"].ToString() : null;
+}
+
+<br />
+<h1>Cartelera</h1>
+<br />
+
+<div class="contenido-pelicula">
+    <div class="datos-pelicula">
+
+        <h2>@titulo</h2>
+
+        <p>@sinopsis</p>
+
+        <div class="tabla">
+            <div class="fila">
+                <div class="celda-titulo">Fecha de Estreno:</div>
+                <div class="celda">@fechaEstreno</div>
+            </div>
+            <div class="fila">
+                <div class="celda-titulo">Género:</div>
+                <div class="celda">@genero</div>
+            </div>
+            <div class="fila">
+                <div class="celda-titulo">Director:</div>
+                <div class="celda">@director</div>
+            </div>
+            <div class="fila">
+                <div class="celda-titulo">Reparto:</div>
+                <div class="celda">@reparto</div>
+            </div>
+            <div class="fila">
+                <div class="celda-titulo">Duración:</div>
+                <div class="celda">@duracion min</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="imagen-pelicula">
+        <img src="@Url.Content("~/Content/img/pelicula/" + idPelicula + ".jpg")"
+             width="160" height="226"
+             alt="Poster de @titulo"
+             onerror="this.onerror=null;this.src='@Url.Content("~/Content/img/varios/placeholder.jpg")';" />
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(link))
+{
+    <div class="pelicula-video">
+        <iframe width="580" height="400"
+                src="https://www.youtube.com/embed/@link"
+                frameborder="0"
+                allowfullscreen>
+        </iframe>
+    </div>
+}

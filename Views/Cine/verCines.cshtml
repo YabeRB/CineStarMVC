@@ -1,0 +1,46 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "verCines";
+    Layout = "~/Views/Shared/CineStar.cshtml";
+}
+
+<br />
+<h1>Nuestros Cines</h1>
+<br />
+
+@if (Model != null && Model.Rows.Count > 0)
+{
+    foreach (System.Data.DataRow row in Model.Rows)
+    {
+        if (!row.Table.Columns.Contains("id")) { continue; } 
+
+        var id = row["id"].ToString();
+        var razonSocial = row.Table.Columns.Contains("RazonSocial") ? row["RazonSocial"].ToString() : "Cine desconocido";
+        var direccion = row.Table.Columns.Contains("Direccion") ? row["Direccion"].ToString() : "Dirección no disponible";
+        var telefonos = row.Table.Columns.Contains("Telefonos") ? row["Telefonos"].ToString() : "No informado";
+
+        <div class="contenido-cine">
+            <img src="@Url.Content("~/Content/img/cine/" + id + ".1.jpg")"
+                 width="277" height="170"
+                 onerror="this.onerror=null;this.src='@Url.Content("~/Content/img/varios/placeholder.jpg")';" />
+
+            <div class="datos-cine">
+                <h4>@razonSocial</h4><br />
+                <span>
+                    @direccion<br /><br />
+                    Teléfono: @telefonos
+                </span>
+            </div>
+
+            <br />
+            <a href="@Url.Action("verCine", "Cine", new { id = id })">
+                <img src="@Url.Content("~/Content/img/varios/ico-info2.png")"
+                     width="150" height="40" />
+            </a>
+        </div>
+    }
+}
+else
+{
+    <p>No hay cines disponibles en este momento.</p>
+}

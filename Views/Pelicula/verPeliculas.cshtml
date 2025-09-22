@@ -1,0 +1,76 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "verPeliculas";
+    Layout = "~/Views/Shared/CineStar.cshtml";
+}
+
+<br />
+<h1>Cartelera</h1>
+<br />
+
+@if (Model == null || Model.Rows.Count == 0)
+{
+    <p>No hay películas disponibles en este momento.</p>
+}
+else
+{
+    foreach (System.Data.DataRow row in Model.Rows)
+    {
+        var titulo = row.Table.Columns.Contains("Titulo") && row["Titulo"] != DBNull.Value
+            ? row["Titulo"].ToString()
+            : "Título no disponible";
+
+        var sinopsis = row.Table.Columns.Contains("Sinopsis") && row["Sinopsis"] != DBNull.Value
+            ? row["Sinopsis"].ToString()
+            : "";
+
+        var link = row.Table.Columns.Contains("Link") && row["Link"] != DBNull.Value
+            ? row["Link"].ToString()
+            : null;
+
+        var idPelicula = row.Table.Columns.Contains("Id") && row["Id"] != DBNull.Value
+            ? row["Id"].ToString()
+            : null;
+
+        var imagen = !string.IsNullOrEmpty(idPelicula)
+            ? $"~/Content/img/pelicula/{idPelicula}.jpg"
+            : "~/Content/img/varios/placeholder.jpg";
+
+        <div class="contenido-pelicula">
+            <div class="datos-pelicula">
+                <h2>@titulo</h2>
+                <br />
+
+                <p>@sinopsis</p>
+                <br />
+
+                @if (!string.IsNullOrEmpty(idPelicula))
+                {
+                    <div class="boton-pelicula">
+                        <a href="@Url.Action("verPelicula", "Pelicula", new { idPelicula = Convert.ToInt32(idPelicula) })">
+                            <img src="@Url.Content("~/Content/img/varios/btn-mas-info.jpg")"
+                                 width="120" height="30" alt="Ver-info">
+                        </a>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(link))
+                {
+                    <div class="boton-pelicula">
+                        <a href="@link" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">
+                            <img src="@Url.Content("~/Content/img/varios/btn-trailer.jpg")"
+                                 width="120" height="30" alt="Ver trailer">
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <div class="imagen-pelicula">
+                <img src="@Url.Content(imagen)"
+                     width="160" height="226"
+                     onerror="this.onerror=null;this.src='@Url.Content("~/Content/img/varios/placeholder.jpg")';" />
+            </div>
+        </div>
+    }
+}
